@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>بحث وتحميل فيديو أو صوت</title>
+    <style>
+        body { font-family: 'Cairo', Arial, sans-serif; background: #f6faff; margin: 0; }
+        .main-box { max-width: 650px; margin: 50px auto; background: #fff; border-radius: 16px; box-shadow: 0 0 30px 3px #2222; padding: 30px 30px 18px 30px; }
+        h2 { text-align: center; color: #324; }
+        form { margin-bottom: 30px; display: flex; gap: 10px; }
+        input[type="text"] { flex:1; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1.04em;}
+        button { background: #6a82fb; color: #fff; font-size: 1.07em; padding: 11px 22px; border: none; border-radius: 6px; cursor: pointer;}
+        .results { margin-top: 30px; }
+        .result { display: flex; align-items: center; background: #f2f7fa; border-radius: 10px; padding: 14px 11px; margin-bottom: 15px;}
+        .thumb { width: 110px; height: 64px; border-radius: 7px; background: #ccc; margin-left: 16px;}
+        .info { flex:1;}
+        .title { font-size: 1.09em; color: #222; font-weight: bold; margin-bottom: 8px;}
+        .download-btns { display: flex; gap: 12px;}
+        .download-btns form { display: inline-block; }
+        .download-btns button { padding: 7px 18px; font-size: 0.98em; border-radius: 5px;}
+        .mp3 { background: #fc5c7d; }
+        .mp4 { background: #6a82fb; }
+    </style>
+</head>
+<body dir="rtl">
+    <div class="main-box">
+        <h2>بحث وتحميل فيديو/صوت</h2>
+        <form method="post">
+            <input type="text" name="search" placeholder="اكتب اسم الأغنية أو الفيديو..." value="{{ query }}" required>
+            <button type="submit">بحث</button>
+        </form>
+        {% if results %}
+        <div class="results">
+            {% for r in results %}
+            <div class="result">
+                <img class="thumb" src="https://img.youtube.com/vi/{{ r.id }}/mqdefault.jpg" alt="صورة مصغرة">
+                <div class="info">
+                    <div class="title">{{ r.title }}</div>
+                    <div class="download-btns">
+                        <form action="/download" method="post">
+                            <input type="hidden" name="url" value="https://www.youtube.com/watch?v={{ r.id }}">
+                            <input type="hidden" name="format" value="audio">
+                            <button type="submit" class="mp3">MP3 تحميل</button>
+                        </form>
+                        <form action="/download" method="post">
+                            <input type="hidden" name="url" value="https://www.youtube.com/watch?v={{ r.id }}">
+                            <input type="hidden" name="format" value="video">
+                            <button type="submit" class="mp4">MP4 تحميل</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
